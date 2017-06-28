@@ -46,7 +46,7 @@
       TwitterGeo.prototype.createMap = function () {
         var square1905 = {lat: 56.833330, lng: 60.583330};
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 15,
+          zoom: 16,
           center: square1905,
           mapTypeId: 'hybrid'
         });
@@ -61,6 +61,7 @@
       };
 
       TwitterGeo.prototype.addMarker = function (tweet) {
+        var twitterGeo = this;
         var marker = new google.maps.Marker({
           position: {
             lat: tweet.geo.coordinates[0],
@@ -80,12 +81,13 @@
           console.log('Not found URL in tweet', text);
         }
         var infoWindow = new google.maps.InfoWindow({
-          content: text
+          content: text,
+          maxWidth: 250
         });
         marker.addListener('click', function () {
-          infoWindow.open(this.map, marker);
+          infoWindow.open(twitterGeo.map, marker);
         });
-        //infoWindow.open(map, marker);
+        infoWindow.open(this.map, marker);
         this.markers.push(marker);
         return marker;
       };
