@@ -47,8 +47,18 @@
           map: this.map,
           title: tweet.text
         });
+        var linkStart = tweet.text.lastIndexOf("https://");
+        var text;
+        if (linkStart >= 0) {
+          var textFragment = tweet.text.substr(0, linkStart);
+          var linkFragment = tweet.text.substr(linkStart);
+          text = `<a href='${linkFragment}'>${textFragment}</a>`
+        } else {
+          text = tweet.text;
+          console.log('Not found URL in tweet', text);
+        }
         var infoWindow = new google.maps.InfoWindow({
-          content: tweet.text
+          content: text
         });
         marker.addListener('click', function () {
           infoWindow.open(this.map, marker);
