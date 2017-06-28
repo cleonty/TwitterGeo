@@ -9,16 +9,38 @@
         height: 100%;
         width: 100%;
       }
+      #top-panel {
+        position: absolute;
+        margin: auto;
+        top: 10px;
+        left: 0;
+        right: 0;
+        z-index: 5;
+        background-color: transparent;
+        padding: 5px;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+      }
     </style>
   </head>
   <body>
     <div id="map"></div>
+    <div id="top-panel">
+      <input id="home" type=button value="Home">
+    </div>
     <script>
       function TwitterGeo() {
         this.tweets = [];
         this.markers = [];
+        this.geoOptions = {
+          enableHighAccuracy: true,
+          maximumAge: 30000,
+          timeout: 27000
+        };
         this.map = this.createMap();
-        this.watchPosition();
+        this.addHomeButtonOnClickListener();
+        this.goToCurrentPosition();
+        this.watchMapPosition();
       }
 
       TwitterGeo.prototype.createMap = function () {
@@ -33,7 +55,7 @@
 
       TwitterGeo.prototype.removeMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
-          this.markers[i].map = null;
+          this.markers[i].setMap(null);
         }
         this.markers = [];
       };
@@ -109,13 +131,29 @@
       };
 
       TwitterGeo.prototype.watchPosition = function () {
-        var geoOptions = {
-          enableHighAccuracy: true,
-          maximumAge: 30000,
-          timeout: 27000
-        };
-        navigator.geolocation.watchPosition(this.geoSuccess.bind(this), this.geoError.bind(this), geoOptions);
+        navigator.geolocation.watchPosition(this.geoSuccess.bind(this), this.geoError.bind(this), this.geoOptions);
       };
+
+      TwitterGeo.prototype.watchMapPosition = function () {
+        var twitterGeo = this;
+        this.map.addListener('dragend', function () {
+          var center = twitterGeo.map.getCenter();
+          twitterGeo.reloadTweets(center.lat(), center.lng());
+        });
+      };
+
+      TwitterGeo.prototype.goToCurrentPosition = function () {
+        navigator.geolocation.getCurrentPosition(this.geoSuccess.bind(this), this.geoError.bind(this), this.geoOptions);
+      };
+
+      TwitterGeo.prototype.addHomeButtonOnClickListener = function () {
+        var homeButton = document.getElementById('home');
+        if (homeButton) {
+          homeButton.addEventListener('click', this.goToCurrentPosition.bind(this));
+        }
+      };
+
+
       function showMap() {
         var twitterGeo = new TwitterGeo();
       }
