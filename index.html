@@ -74,7 +74,7 @@
         if (linkStart >= 0) {
           var textFragment = tweet.text.substr(0, linkStart);
           var linkFragment = tweet.text.substr(linkStart);
-          text = `<a href='${linkFragment}'>${textFragment}</a>`
+          text = `<a target="_blank" href='${linkFragment}'>${textFragment}</a>`;
         } else {
           text = tweet.text;
           console.log('Not found URL in tweet', text);
