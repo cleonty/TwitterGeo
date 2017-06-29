@@ -46,9 +46,9 @@ TwitterGeo.prototype.addMarker = function (tweet) {
   if (linkStart >= 0) {
     var textFragment = tweet.text.substr(0, linkStart);
     var linkFragment = tweet.text.substr(linkStart);
-    text = `<a target="_blank" href='${linkFragment}'>${textFragment}</a>`;
+    text = `<a target="_blank" href='${linkFragment}'>${tweet.user.screen_name}: ${textFragment}</a>`;
   } else {
-    text = tweet.text;
+    text = tweet.user.screen_name + ': ' + tweet.text;
     console.log('Not found URL in tweet', text);
   }
   var infoWindow = new google.maps.InfoWindow({
