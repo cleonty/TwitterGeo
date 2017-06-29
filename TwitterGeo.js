@@ -43,6 +43,7 @@ TwitterGeo.prototype.addMarker = function (tweet) {
   });
   var linkStart = tweet.text.lastIndexOf("https://");
   var text;
+  var profileImageUrl = tweet.user.profile_image_url_https;
   if (linkStart >= 0) {
     var textFragment = tweet.text.substr(0, linkStart);
     var linkFragment = tweet.text.substr(linkStart);
@@ -51,8 +52,9 @@ TwitterGeo.prototype.addMarker = function (tweet) {
     text = tweet.user.screen_name + ': ' + tweet.text;
     console.log('Not found URL in tweet', text);
   }
+  var textWithImage = `<img class='user_image' src='${profileImageUrl}'></img>${text}`;
   var infoWindow = new google.maps.InfoWindow({
-    content: text,
+    content: textWithImage,
     maxWidth: 250
   });
   marker.addListener('click', function () {
