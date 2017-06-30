@@ -54,6 +54,7 @@ func search(token string, query string) (body1 string, err error) {
 	req.Header.Add("Authorization", "Bearer "+token)
 	q := req.URL.Query()
 	q.Add("q", query)
+	q.Add("result_type", "recent")
 	req.URL.RawQuery = q.Encode()
 	client := &http.Client{}
 	resp, err := client.Do(req)
