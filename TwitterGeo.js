@@ -1,8 +1,12 @@
-function TwitterGeo(mapId, homeButtonId) {
+function TwitterGeo(mapId, homeButtonId, listId) {
   this.mapId = mapId;
   this.homeButtonId = homeButtonId;
+  this.listId = listId;
+  this.list = document.getElementById(listId);
   this.tweets = [];
   this.markers = [];
+  this.currentInfoWindow = null;
+  this.currentMarker = null;
   this.geoOptions = {
     enableHighAccuracy: true,
     maximumAge: 30000,
@@ -42,25 +46,35 @@ TwitterGeo.prototype.addMarker = function (tweet) {
     title: tweet.text
   });
   var linkStart = tweet.text.lastIndexOf("https://");
-  var text;
   var profileImageUrl = tweet.user.profile_image_url_https;
+  var formattedText;
   if (linkStart >= 0) {
     var textFragment = tweet.text.substr(0, linkStart);
     var linkFragment = tweet.text.substr(linkStart);
-    text = `<a target="_blank" href='${linkFragment}'>${tweet.user.screen_name}: ${textFragment}</a>`;
+    formattedText = `${textFragment} <a target="_blank" href="${linkFragment}">${linkFragment}</a>`;
   } else {
-    text = tweet.user.screen_name + ': ' + tweet.text;
-    console.log('Not found URL in tweet', text);
+    console.log('Not found URL in tweet', tweet.text);
+    formattedText = tweet.text;
   }
-  var textWithImage = `<img class='user_image' src='${profileImageUrl}'></img>${text}`;
+  var content = [
+    `<div class="media">`,
+    `  <div class="media-left">`,
+    `     <img src="${profileImageUrl}" class="media-object" style="width:48px">`,
+    `  </div>`,
+    `  <div class="media-body">`,
+    `    <h4 class="media-heading">${tweet.user.name}</h4>`,
+    `    <p>${formattedText}</p>`,
+    `  </div>`,
+    `</div>`
+  ].join('\n');
   var infoWindow = new google.maps.InfoWindow({
-    content: textWithImage,
-    maxWidth: 250
+    content: content,
+    maxWidth: 320
   });
   marker.addListener('click', function () {
-    infoWindow.open(twitterGeo.map, marker);
+    twitterGeo.openInfoWindow(infoWindow, marker);
   });
-  infoWindow.open(this.map, marker);
+  this.addTweetToList(tweet, marker, infoWindow, content);
   this.markers.push(marker);
   return marker;
 };
@@ -75,6 +89,40 @@ TwitterGeo.prototype.addMarkers = function (tweets) {
   }
 };
 
+TwitterGeo.prototype.openInfoWindow = function(infoWindow, marker) {
+  if (this.currentInfoWindow) {
+    this.currentInfoWindow.close();
+    this.currentInfoWindow = null;
+    this.currentMarker = null;
+  }
+  infoWindow.open(this.map, marker);
+  this.currentInfoWindow = infoWindow;
+  this.currentMarker = marker;
+};
+
+TwitterGeo.prototype.clearList = function () {
+  var list = this.list;
+  if (list) {
+    while (list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
+  }
+};
+
+TwitterGeo.prototype.addTweetToList = function (tweet, marker, infoWindow, textWithImage) {
+  var twitterGeo = this;
+  var list = this.list;
+  if (list) {
+    var li = document.createElement('li');
+    li.className = 'list-group-item';
+    li.innerHTML = textWithImage;
+    li.addEventListener('click', function (e) {
+      twitterGeo.openInfoWindow(infoWindow, marker);
+    });
+    list.appendChild(li);
+  }
+};
+
 TwitterGeo.prototype.reloadTweets = function (latitude, longitude) {
   var twitterGeo = this;
   var searchUri = encodeURI(`/search/?q=geocode:${latitude},${longitude},1km`);
@@ -84,6 +132,7 @@ TwitterGeo.prototype.reloadTweets = function (latitude, longitude) {
     var jsonResponse = JSON.parse(searchRequest.responseText);
     var tweets = jsonResponse.statuses;
     twitterGeo.removeMarkers();
+    twitterGeo.clearList();
     twitterGeo.addMarkers(tweets);
   };
   searchRequest.onerror = function (e) {

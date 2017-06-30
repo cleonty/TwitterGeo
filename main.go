@@ -55,6 +55,7 @@ func search(token string, query string) (body1 string, err error) {
 	q := req.URL.Query()
 	q.Add("q", query)
 	q.Add("result_type", "recent")
+	q.Add("count", "30")
 	req.URL.RawQuery = q.Encode()
 	client := &http.Client{}
 	resp, err := client.Do(req)
