@@ -7,6 +7,7 @@ function TwitterGeo(mapId, homeButtonId, listId) {
   this.markers = [];
   this.currentInfoWindow = null;
   this.currentMarker = null;
+  this.activeListItem = null;
   this.geoOptions = {
     enableHighAccuracy: true,
     maximumAge: 30000,
@@ -71,10 +72,14 @@ TwitterGeo.prototype.addMarker = function (tweet) {
     content: content,
     maxWidth: 320
   });
+  var listItem = this.addTweetToList(tweet, marker, infoWindow, content);
   marker.addListener('click', function () {
-    twitterGeo.openInfoWindow(infoWindow, marker);
+    twitterGeo.openInfoWindow(infoWindow, marker, listItem);
+    listItem.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
-  this.addTweetToList(tweet, marker, infoWindow, content);
   this.markers.push(marker);
   return marker;
 };
@@ -89,12 +94,13 @@ TwitterGeo.prototype.addMarkers = function (tweets) {
   }
 };
 
-TwitterGeo.prototype.openInfoWindow = function(infoWindow, marker) {
+TwitterGeo.prototype.openInfoWindow = function (infoWindow, marker, listItem) {
   if (this.currentInfoWindow) {
     this.currentInfoWindow.close();
     this.currentInfoWindow = null;
     this.currentMarker = null;
   }
+  this.activateListItem(listItem);
   infoWindow.open(this.map, marker);
   this.currentInfoWindow = infoWindow;
   this.currentMarker = marker;
@@ -117,10 +123,19 @@ TwitterGeo.prototype.addTweetToList = function (tweet, marker, infoWindow, textW
     li.className = 'list-group-item';
     li.innerHTML = textWithImage;
     li.addEventListener('click', function (e) {
-      twitterGeo.openInfoWindow(infoWindow, marker);
+      twitterGeo.openInfoWindow(infoWindow, marker, li);
     });
     list.appendChild(li);
   }
+  return li;
+};
+
+TwitterGeo.prototype.activateListItem = function (listItem) {
+  if (this.activeListItem) {
+    this.activeListItem.classList.remove('active');
+  }
+  listItem.classList.add('active');
+  this.activeListItem = listItem;
 };
 
 TwitterGeo.prototype.reloadTweets = function (latitude, longitude) {
