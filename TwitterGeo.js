@@ -125,9 +125,6 @@ TweetList.prototype.setTweets = function (tweetObjects) {
   for (var i = 0; i < tweetObjects.length; i++) {
     this.addTweet(tweetObjects[i]);
   }
-  if (this.tweets.length > 0) {
-    this.tweets[0].activate();
-  }
 };
 
 TweetList.prototype.addTweet = function (tweetObject) {
@@ -171,6 +168,8 @@ TweetList.prototype.activateNextTweet = function () {
     } else {
       this.tweets[0].activate();
     }
+  } else if (this.tweets.length > 0) {
+    this.tweets[0].activate();
   }
 };
 
@@ -182,6 +181,8 @@ TweetList.prototype.activatePreviousTweet = function () {
     } else {
       this.tweets[this.tweets.length - 1].activate();
     }
+  } else if (this.tweets.length > 0) {
+    this.tweets[0].activate();
   }
 };
 
