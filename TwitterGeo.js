@@ -1,3 +1,5 @@
+/* global google */
+
 function Tweet(tweetObject, map, list) {
   this.tweetObject = tweetObject;
   this.map = map;
@@ -115,7 +117,7 @@ function TweetList(map, list) {
   this.list = list;
   this.tweets = [];
   this.activeTweet = null;
-  this.addKeyPressListener();
+  this.addEventListenters();
 }
 
 TweetList.prototype.setTweets = function (tweetObjects) {
@@ -183,8 +185,7 @@ TweetList.prototype.activatePreviousTweet = function () {
   }
 };
 
-TweetList.prototype.keyPressed = function (e) {
-  console.log('key pressed', e);
+TweetList.prototype.onKeyPressed = function (e) {
   if (e.code === 'ArrowUp') {
     e.preventDefault();
     e.stopPropagation();
@@ -196,8 +197,21 @@ TweetList.prototype.keyPressed = function (e) {
   }
 };
 
-TweetList.prototype.addKeyPressListener = function () {
-  document.addEventListener('keydown', this.keyPressed.bind(this));
+TweetList.prototype.onWheel = function (e) {
+  if (e.wheelDelta > 0) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.activatePreviousTweet();
+  } else {
+    e.preventDefault();
+    e.stopPropagation();
+    this.activateNextTweet();
+  }
+};
+
+TweetList.prototype.addEventListenters = function () {
+  document.addEventListener('keydown', this.onKeyPressed.bind(this));
+  document.addEventListener('wheel', this.onWheel.bind(this));
 };
 
 function TwitterGeo(mapId, homeButtonId, listId) {
