@@ -5,11 +5,12 @@ function Tweet(tweetObject, map, list) {
   this.map = map;
   this.infoWindow;
   this.list = list;
-  this.htmlContent = this.getHtmlContent();
   this.marker = this.createMarker();
+  this.htmlContent = this.getHtmlContent();
   this.infoWindow = this.createInfoWindow();
   this.listItem = this.createListItem();
   this.onActivateListeners = [];
+  this.debug = false;
 }
 
 Tweet.prototype.getHtmlContent = function () {
@@ -21,7 +22,9 @@ Tweet.prototype.getHtmlContent = function () {
     var linkFragment = this.tweetObject.text.substr(linkStart);
     formattedText = `${textFragment} <a target="_blank" href="${linkFragment}">${linkFragment}</a>`;
   } else {
-    console.log('Not found URL in tweet', this.tweetObject.text);
+    if (this.debug) {
+      console.info('Not found URL in tweet', this.tweetObject.text);
+    }
     formattedText = this.tweetObject.text;
   }
   return [
@@ -38,10 +41,29 @@ Tweet.prototype.getHtmlContent = function () {
 };
 
 Tweet.prototype.createMarker = function () {
+  var latitude, longitude;
+  if (this.tweetObject.geo) {
+    latitude = this.tweetObject.geo.coordinates[0];
+    longitude = this.tweetObject.geo.coordinates[1];
+  } else if (this.tweetObject.place) {
+    var placeCoordinates = this.tweetObject.place.bounding_box.coordinates[0];
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < placeCoordinates.length; i++) {
+      bounds.extend({
+        lat: placeCoordinates[i][1], // latitude  is in element 1
+        lng: placeCoordinates[i][0]  // longitude is in element 0
+      });
+    }
+    var center = bounds.getCenter();
+    latitude = center.lat();
+    longitude = center.lng();
+  } else {
+    console.long('No geo information in tweet', this.tweetObject);
+  }
   var marker = new google.maps.Marker({
     position: {
-      lat: this.tweetObject.geo.coordinates[0],
-      lng: this.tweetObject.geo.coordinates[1]
+      lat: latitude,
+      lng: longitude
     },
     map: this.map,
     title: this.tweetObject.text
@@ -128,13 +150,9 @@ TweetList.prototype.setTweets = function (tweetObjects) {
 };
 
 TweetList.prototype.addTweet = function (tweetObject) {
-  if (tweetObject.geo) {
-    var tweet = new Tweet(tweetObject, this.map, this.list);
-    this.tweets.push(tweet);
-    tweet.addOnActivateListener(this.onTweetActivated.bind(this));
-  } else {
-    console.log('No geo info in tweet', tweetObject);
-  }
+  var tweet = new Tweet(tweetObject, this.map, this.list);
+  this.tweets.push(tweet);
+  tweet.addOnActivateListener(this.onTweetActivated.bind(this));
 };
 
 TweetList.prototype.clear = function () {
@@ -243,8 +261,10 @@ TwitterGeo.prototype.createMap = function () {
   return map;
 };
 
-TwitterGeo.prototype.reloadTweets = function (latitude, longitude) {
+TwitterGeo.prototype.reloadTweets = function () {
   var twitterGeo = this;
+  var center = this.map.getCenter();
+  var latitude = center.lat(), longitude = center.lng();
   var searchUri = encodeURI(`/search/?q=geocode:${latitude},${longitude},1km`);
   var searchRequest = new XMLHttpRequest();
   searchRequest.open('GET', searchUri, true);
@@ -259,13 +279,19 @@ TwitterGeo.prototype.reloadTweets = function (latitude, longitude) {
   searchRequest.send();
 };
 
+TwitterGeo.prototype.reloadTweetsIfNeeded = function () {
+  if (this.map.getZoom() > 11) {
+    this.reloadTweets();
+  }
+};
+
 TwitterGeo.prototype.geoSuccess = function (position) {
   console.log('New position:', position.coords.latitude, position.coords.longitude);
   this.map.setCenter({
     lat: position.coords.latitude,
     lng: position.coords.longitude
   });
-  this.reloadTweets(position.coords.latitude, position.coords.longitude);
+  this.reloadTweets();
 };
 
 TwitterGeo.prototype.geoError = function () {
@@ -277,11 +303,8 @@ TwitterGeo.prototype.watchPosition = function () {
 };
 
 TwitterGeo.prototype.watchMapPosition = function () {
-  var twitterGeo = this;
-  this.map.addListener('dragend', function () {
-    var center = twitterGeo.map.getCenter();
-    twitterGeo.reloadTweets(center.lat(), center.lng());
-  });
+  this.map.addListener('dragend', this.reloadTweetsIfNeeded.bind(this));
+  this.map.addListener('zoom_changed', this.reloadTweetsIfNeeded.bind(this));
 };
 
 TwitterGeo.prototype.goToCurrentPosition = function () {
