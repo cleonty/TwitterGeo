@@ -17,10 +17,12 @@ Tweet.prototype.getHtmlContent = function () {
   var linkStart = this.tweetObject.text.lastIndexOf("https://");
   var profileImageUrl = this.tweetObject.user.profile_image_url_https;
   var formattedText;
+  var formattedTime;
   if (linkStart >= 0) {
     var textFragment = this.tweetObject.text.substr(0, linkStart);
-    var linkFragment = this.tweetObject.text.substr(linkStart);
+    var tweetTime = new Date(this.tweetObject.created_at); 
     formattedText = `${textFragment} <a target="_blank" href="${linkFragment}">${linkFragment}</a>`;
+    formattedTime = `${tweetTime.getHours()}:${tweetTime.getMinutes()} ${tweetTime.getDate()}/${tweetTime.getMonth()+1}/${tweetTime.getFullYear()}`;
   } else {
     if (this.debug) {
       console.info('Not found URL in tweet', this.tweetObject.text);
@@ -35,6 +37,7 @@ Tweet.prototype.getHtmlContent = function () {
     `  <div class="media-body">`,
     `    <h4 class="media-heading">${this.tweetObject.user.name}</h4>`,
     `    <p>${formattedText}</p>`,
+    `    <p>Время создания: ${formattedTime}</p>`,    
     `  </div>`,
     `</div>`
   ].join('\n');
