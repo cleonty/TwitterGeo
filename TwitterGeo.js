@@ -57,8 +57,6 @@ Tweet.prototype.createMarker = function () {
     var center = bounds.getCenter();
     latitude = center.lat();
     longitude = center.lng();
-  } else {
-    console.long('No geo information in tweet', this.tweetObject);
   }
   var marker = new google.maps.Marker({
     position: {
@@ -150,9 +148,13 @@ TweetList.prototype.setTweets = function (tweetObjects) {
 };
 
 TweetList.prototype.addTweet = function (tweetObject) {
-  var tweet = new Tweet(tweetObject, this.map, this.list);
-  this.tweets.push(tweet);
-  tweet.addOnActivateListener(this.onTweetActivated.bind(this));
+  if (tweetObject.geo || tweetObject.place) {
+    var tweet = new Tweet(tweetObject, this.map, this.list);
+    this.tweets.push(tweet);
+    tweet.addOnActivateListener(this.onTweetActivated.bind(this));
+  } else {
+    console.log('No geo information in tweet', tweetObject.text);
+  }
 };
 
 TweetList.prototype.clear = function () {
@@ -238,6 +240,7 @@ function TwitterGeo(mapId, homeButtonId, listId) {
   this.homeButtonId = homeButtonId;
   this.listId = listId;
   this.list = document.getElementById(listId);
+  this.maxRadius = 3;
   this.geoOptions = {
     enableHighAccuracy: true,
     maximumAge: 30000,
@@ -262,10 +265,16 @@ TwitterGeo.prototype.createMap = function () {
 };
 
 TwitterGeo.prototype.reloadTweets = function () {
+  var bounds = this.map.getBounds();
+  var nePoint = bounds.getNorthEast();
+  var swPoint = bounds.getSouthWest();
+  var distance = google.maps.geometry.spherical.computeDistanceBetween(nePoint, swPoint);
+  var radius = (distance / 2000).toFixed(1);
+  radius = Math.min(radius, this.maxRadius);
   var twitterGeo = this;
   var center = this.map.getCenter();
   var latitude = center.lat(), longitude = center.lng();
-  var searchUri = encodeURI(`/search/?q=geocode:${latitude},${longitude},1km`);
+  var searchUri = encodeURI(`/search/?q=geocode:${latitude},${longitude},${radius}km`);
   var searchRequest = new XMLHttpRequest();
   searchRequest.open('GET', searchUri, true);
   searchRequest.onload = function (e) {
