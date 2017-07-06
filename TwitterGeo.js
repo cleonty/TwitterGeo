@@ -20,6 +20,7 @@ Tweet.prototype.getHtmlContent = function () {
   var formattedTime;
   if (linkStart >= 0) {
     var textFragment = this.tweetObject.text.substr(0, linkStart);
+    var linkFragment = this.tweetObject.text.substr(linkStart);
     var tweetTime = new Date(this.tweetObject.created_at); 
     formattedText = `${textFragment} <a target="_blank" href="${linkFragment}">${linkFragment}</a>`;
     formattedTime = `${tweetTime.getHours()}:${tweetTime.getMinutes()} ${tweetTime.getDate()}/${tweetTime.getMonth()+1}/${tweetTime.getFullYear()}`;
