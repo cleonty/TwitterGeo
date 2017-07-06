@@ -256,7 +256,7 @@ function TwitterGeo(mapId, homeButtonId, listId) {
 TwitterGeo.prototype.createMap = function () {
   var square1905 = {lat: 56.833330, lng: 60.583330};
   var map = new google.maps.Map(document.getElementById(this.mapId), {
-    zoom: 15,
+    zoom: 16,
     center: square1905,
     mapTypeId: 'hybrid',
     keyboardShortcuts: false
@@ -265,12 +265,15 @@ TwitterGeo.prototype.createMap = function () {
 };
 
 TwitterGeo.prototype.reloadTweets = function () {
+  var radius = 1;
   var bounds = this.map.getBounds();
-  var nePoint = bounds.getNorthEast();
-  var swPoint = bounds.getSouthWest();
-  var distance = google.maps.geometry.spherical.computeDistanceBetween(nePoint, swPoint);
-  var radius = (distance / 2000).toFixed(1);
-  radius = Math.min(radius, this.maxRadius);
+  if (bounds) {
+    var nePoint = bounds.getNorthEast();
+    var swPoint = bounds.getSouthWest();
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(nePoint, swPoint);
+    var radius = (distance / 2000).toFixed(1);
+    radius = Math.min(radius, this.maxRadius);
+  }
   var twitterGeo = this;
   var center = this.map.getCenter();
   var latitude = center.lat(), longitude = center.lng();
@@ -289,6 +292,7 @@ TwitterGeo.prototype.reloadTweets = function () {
 };
 
 TwitterGeo.prototype.reloadTweetsIfNeeded = function () {
+  console.log("zoom", this.map.getZoom());
   if (this.map.getZoom() > 11) {
     this.reloadTweets();
   }
