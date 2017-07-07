@@ -18,12 +18,12 @@ Tweet.prototype.getHtmlContent = function () {
   var profileImageUrl = this.tweetObject.user.profile_image_url_https;
   var formattedText;
   var formattedTime;
+  var tweetTime = new Date(this.tweetObject.created_at);
+  formattedTime = `${tweetTime.getHours()}:${tweetTime.getMinutes()} ${tweetTime.getDate()}/${tweetTime.getMonth()+1}/${tweetTime.getFullYear()}`;
   if (linkStart >= 0) {
     var textFragment = this.tweetObject.text.substr(0, linkStart);
-    var linkFragment = this.tweetObject.text.substr(linkStart);
-    var tweetTime = new Date(this.tweetObject.created_at); 
+    var linkFragment = this.tweetObject.text.substr(linkStart); 
     formattedText = `${textFragment} <a target="_blank" href="${linkFragment}">${linkFragment}</a>`;
-    formattedTime = `${tweetTime.getHours()}:${tweetTime.getMinutes()} ${tweetTime.getDate()}/${tweetTime.getMonth()+1}/${tweetTime.getFullYear()}`;
   } else {
     if (this.debug) {
       console.info('Not found URL in tweet', this.tweetObject.text);
