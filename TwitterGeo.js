@@ -17,9 +17,7 @@ Tweet.prototype.getHtmlContent = function () {
   var linkStart = this.tweetObject.text.lastIndexOf("https://");
   var profileImageUrl = this.tweetObject.user.profile_image_url_https;
   var formattedText;
-  var formattedTime;
-  var tweetTime = new Date(this.tweetObject.created_at);
-  formattedTime = `${tweetTime.getHours()}:${tweetTime.getMinutes()} ${tweetTime.getDate()}/${tweetTime.getMonth()+1}/${tweetTime.getFullYear()}`;
+  var formattedTime = this.getFormattedTime();
   if (linkStart >= 0) {
     var textFragment = this.tweetObject.text.substr(0, linkStart);
     var linkFragment = this.tweetObject.text.substr(linkStart); 
@@ -42,6 +40,19 @@ Tweet.prototype.getHtmlContent = function () {
     `  </div>`,
     `</div>`
   ].join('\n');
+};
+
+Tweet.prototype.getFormattedTime = function () {
+  function addZeroIfNeeded(x) {
+    return ("0" + x).substr(-2);
+  }
+  var date = new Date(this.tweetObject.created_at);
+  var hh = addZeroIfNeeded(date.getHours());
+  var mm = addZeroIfNeeded(date.getMinutes());
+  var dd = addZeroIfNeeded(date.getDate());
+  var MM = addZeroIfNeeded(date.getMonth() + 1);
+  var yy = addZeroIfNeeded(date.getYear() - 100);
+  return `${hh}:${mm} ${dd}/${MM}/${yy}`;
 };
 
 Tweet.prototype.createMarker = function () {
