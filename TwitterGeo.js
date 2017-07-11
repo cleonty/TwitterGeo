@@ -18,6 +18,7 @@ Tweet.prototype.getHtmlContent = function () {
   var profileImageUrl = this.tweetObject.user.profile_image_url_https;
   var formattedText;
   var formattedTime = this.getFormattedTime();
+  var userProfileLink = this.getUserProfileLink();
   if (linkStart >= 0) {
     var textFragment = this.tweetObject.text.substr(0, linkStart);
     var linkFragment = this.tweetObject.text.substr(linkStart); 
@@ -31,10 +32,10 @@ Tweet.prototype.getHtmlContent = function () {
   return [
     `<div class="media">`,
     `  <div class="media-left">`,
-    `     <img src="${profileImageUrl}" class="media-object" style="width:48px">`,
+    `     <a href="${userProfileLink}" target="_blank"><img src="${profileImageUrl}" class="media-object" style="width:48px"></a>`,
     `  </div>`,
     `  <div class="media-body">`,
-    `    <h4 class="media-heading">${this.tweetObject.user.name}</h4>`,
+    `    <h4 class="media-heading"><a href="${userProfileLink}" target="_blank">${this.tweetObject.user.name}</a></h4>`,
     `    <p>${formattedText}</p>`,
     `    <p>Время создания: ${formattedTime}</p>`,    
     `  </div>`,
@@ -53,6 +54,10 @@ Tweet.prototype.getFormattedTime = function () {
   var MM = addZeroIfNeeded(date.getMonth() + 1);
   var yy = addZeroIfNeeded(date.getYear() - 100);
   return `${hh}:${mm} ${dd}/${MM}/${yy}`;
+};
+
+Tweet.prototype.getUserProfileLink = function () {
+  return `https://twitter.com/${this.tweetObject.user.screen_name}`;
 };
 
 Tweet.prototype.createMarker = function () {
