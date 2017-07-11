@@ -292,7 +292,7 @@ TwitterGeo.prototype.reloadTweets = function () {
   var twitterGeo = this;
   var center = this.map.getCenter();
   var latitude = center.lat(), longitude = center.lng();
-  var searchUri = encodeURI(`/search/?q=geocode:${latitude},${longitude},${radius}km`);
+  var searchUri = encodeURI(`/twitter/search/?q=geocode:${latitude},${longitude},${radius}km`);
   var searchRequest = new XMLHttpRequest();
   searchRequest.open('GET', searchUri, true);
   searchRequest.onload = function (e) {
