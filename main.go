@@ -31,7 +31,7 @@ func main() {
 	myMux := http.NewServeMux()
 	installTwitterClient(myMux, "/twitter/search/")
 	installInstagramClient(myMux, "/instagram/search/")
-	myMux.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("."))))
+	myMux.Handle("/", http.FileServer(assetFS()))
 	err := exec.Command("cmd", "/c", "start", "http://localhost:8383/").Start()
 	if err != nil {
 		fmt.Println(err)
