@@ -4,13 +4,13 @@
 # TwitterGeo
 TwitterGeo shows tweets on the map.
 
-# Building a docker image
+## Building a docker image
 ```
 docker build -t twittergeox .
 docker tag twittergeox cleonty/twittergeo:first
 docker push cleonty/twittergeo:first
 ```
-# Running a docker container
+## Running a docker container
 ```
 docker run -p 8888:8383 cleonty/twittergeo:first 
 ```
