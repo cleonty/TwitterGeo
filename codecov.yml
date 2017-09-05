@@ -1,0 +1,4 @@
+ignore:
+  - "public"
+  - "bindata_assetfs.go"
+  - "main.go"
