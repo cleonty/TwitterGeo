@@ -14,4 +14,4 @@ docker push cleonty/twittergeo:first
 ```
 docker run -p 8888:8383 cleonty/twittergeo:first 
 ```
-Open [http://localhost:8888] in the browser.
+Open <http://localhost:8888> in the browser.
