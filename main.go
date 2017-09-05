@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os/exec"
+	"runtime"
 )
 
 func installTwitterClient(mux *http.ServeMux, pattern string) {
@@ -32,10 +33,12 @@ func main() {
 	installTwitterClient(myMux, "/twitter/search/")
 	installInstagramClient(myMux, "/instagram/search/")
 	myMux.Handle("/", http.FileServer(assetFS()))
-	err := exec.Command("cmd", "/c", "start", "http://localhost:8383/").Start()
-	if err != nil {
-		fmt.Println(err)
-		return
+	if runtime.GOOS == "windows" {
+		err := exec.Command("cmd", "/c", "start", "http://localhost:8383/").Start()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 	http.ListenAndServe(":8383", myMux)
 }
