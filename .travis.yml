@@ -12,7 +12,3 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
-install:
-  - go get github.com/jteeuwen/go-bindata/...
-  - go get github.com/elazarl/go-bindata-assetfs/...
