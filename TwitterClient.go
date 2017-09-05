@@ -12,8 +12,8 @@ import (
 )
 
 type authResponse struct {
-	Token_type   string
-	Access_token string
+	tokenType   string `json: "token_type"`
+	accessToken string `json: "access_token"`
 }
 
 type TwitterClient struct {
@@ -50,7 +50,7 @@ func (twitterClient *TwitterClient) ObtainBearerToken() error {
 	if err != nil {
 		return err
 	}
-	twitterClient.bearerToken = res.Access_token
+	twitterClient.bearerToken = res.accessToken
 	return nil
 }
 
