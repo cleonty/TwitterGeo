@@ -6,12 +6,15 @@ import (
 	"net/http"
 	"os/exec"
 	"runtime"
+
+	"github.com/cleonty/TwitterGeo/instagramclient"
+	"github.com/cleonty/TwitterGeo/twitterclient"
 )
 
 func installTwitterClient(mux *http.ServeMux, pattern string) {
 	apiKey := "PFVTXEm6eHZ4efqGOKyIoJM2H"
 	apiSecret := "Gy9VNHY1VKFnKcVyl8lBQXjtXXbAcZKAL09TXVCJJVU8xuO3u1"
-	twitterClient := NewTwitterClient(apiKey, apiSecret)
+	twitterClient := twitterclient.New(apiKey, apiSecret)
 	err := twitterClient.ObtainBearerToken()
 	if err != nil {
 		fmt.Println("error", err)
@@ -24,7 +27,7 @@ func installInstagramClient(mux *http.ServeMux, pattern string) {
 	clientId := "72cdc1f90de845f3ac377f72aa22d266"
 	clientSecret := ""
 	accessToken := "1540244705.72cdc1f.e9cde10469b64164bbab22aedd6b92e1"
-	instagramClient := NewInstagramClientWithAccessToken(clientId, clientSecret, accessToken)
+	instagramClient := instagramclient.NewWithAccessToken(clientId, clientSecret, accessToken)
 	mux.Handle(pattern, instagramClient.SearchHandler())
 }
 

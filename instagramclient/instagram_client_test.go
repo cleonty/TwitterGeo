@@ -1,5 +1,4 @@
-// InstagramClient_test.go
-package main
+package instagramclient
 
 import (
 	"testing"
@@ -9,7 +8,7 @@ func TestInstagramClient(t *testing.T) {
 	clientId := "72cdc1f90de845f3ac377f72aa22d266"
 	clientSecret := ""
 	accessToken := "1540244705.72cdc1f.e9cde10469b64164bbab22aedd6b92e1"
-	instagramClient := NewInstagramClientWithAccessToken(clientId, clientSecret, accessToken)
+	instagramClient := NewWithAccessToken(clientId, clientSecret, accessToken)
 	posts, err := instagramClient.Search("56.833330", "60.583330", "1km")
 	if err != nil {
 		t.Fatal("Couldn't get Instagram posts", err)

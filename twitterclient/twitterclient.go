@@ -1,5 +1,4 @@
-// TwitterClient
-package main
+package twitterclient
 
 import (
 	"bytes"
@@ -12,8 +11,8 @@ import (
 )
 
 type authResponse struct {
-	tokenType   string `json: "token_type"`
-	accessToken string `json: "access_token"`
+	Token_type   string
+	Access_token string
 }
 
 type TwitterClient struct {
@@ -22,7 +21,7 @@ type TwitterClient struct {
 	bearerToken string
 }
 
-func NewTwitterClient(apiKey, apiSecret string) *TwitterClient {
+func New(apiKey, apiSecret string) *TwitterClient {
 	return &TwitterClient{apiKey, apiSecret, ""}
 }
 
@@ -50,7 +49,7 @@ func (twitterClient *TwitterClient) ObtainBearerToken() error {
 	if err != nil {
 		return err
 	}
-	twitterClient.bearerToken = res.accessToken
+	twitterClient.bearerToken = res.Access_token
 	return nil
 }
 

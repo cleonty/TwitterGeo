@@ -1,5 +1,5 @@
-// InstagramClient.go
-package main
+
+package instagramclient
 
 import (
 	"fmt"
@@ -13,11 +13,11 @@ type InstagramClient struct {
 	accessToken  string
 }
 
-func NewInstagramClient(clientId, clientSecret string) *InstagramClient {
+func New(clientId, clientSecret string) *InstagramClient {
 	return &InstagramClient{clientId, clientSecret, ""}
 }
 
-func NewInstagramClientWithAccessToken(clientId, clientSecret string, accessToken string) *InstagramClient {
+func NewWithAccessToken(clientId, clientSecret string, accessToken string) *InstagramClient {
 	return &InstagramClient{clientId, clientSecret, accessToken}
 }
 
