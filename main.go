@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/cleonty/TwitterGeo/instagramclient"
-	"github.com/cleonty/TwitterGeo/twitterclient"
+	"github.com/cleonty/twittergeo/instagramclient"
+	"github.com/cleonty/twittergeo/twitterclient"
 )
 
 func installTwitterClient(mux *http.ServeMux, pattern string) {
