@@ -4,14 +4,23 @@
 # TwitterGeo
 TwitterGeo shows tweets on the map.
 
+## Installation and usage
+
+To install, run:
+
+```
+go get github.com/cleonty/twittergeo
+```
+To run using a docker image, run:
+```
+docker run -p 8888:8383 cleonty/twittergeo:first 
+```
+Open <http://localhost:8888> in the browser.
+
 ## Building a docker image
 ```
 docker build -t twittergeox .
 docker tag twittergeox cleonty/twittergeo:first
 docker push cleonty/twittergeo:first
 ```
-## Running a docker container
-```
-docker run -p 8888:8383 cleonty/twittergeo:first 
-```
-Open <http://localhost:8888> in the browser.
+
