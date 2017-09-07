@@ -18,6 +18,7 @@ docker run -p 8888:8383 cleonty/twittergeo:first
 Open <http://localhost:8888> in the browser.
 
 ## Building a docker image
+
 ```
 docker build -t twittergeox .
 docker tag twittergeox cleonty/twittergeo:first
