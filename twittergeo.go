@@ -1,4 +1,3 @@
-// TwitterGeo project main.go
 package main
 
 import (
