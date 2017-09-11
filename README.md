@@ -13,15 +13,14 @@ go get github.com/cleonty/twittergeo
 ```
 To run using a docker image, run:
 ```
-docker run -p 8888:8383 cleonty/twittergeo:first 
+docker run -p 8888:8383 cleonty/twittergeo:latest
 ```
 Open <http://localhost:8888> in the browser.
 
 ## Building a docker image
 
 ```
-docker build -t twittergeox .
-docker tag twittergeox cleonty/twittergeo:first
-docker push cleonty/twittergeo:first
+docker build -t twittergeo .
+docker tag twittergeo cleonty/twittergeo:latest
+docker push cleonty/twittergeo:latest
 ```
-
