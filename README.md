@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cleonty/twittergeo.svg?branch=master)](https://travis-ci.org/cleonty/TwitterGeo)
+[![Build Status](https://travis-ci.org/cleonty/twittergeo.svg?branch=master)](https://travis-ci.org/cleonty/twittergeo)
 [![codecov](https://codecov.io/gh/cleonty/twittergeo/branch/master/graph/badge.svg)](https://codecov.io/gh/cleonty/twittergeo)
 
 # TwitterGeo
