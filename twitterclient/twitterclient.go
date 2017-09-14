@@ -24,9 +24,8 @@ type TwitterClient struct {
 }
 
 // New creates a new client.
-// apitKey and apiSecret are credentials that are 
+// apitKey and apiSecret are credentials that are
 // utilized for Application-only authentication.
-consumer key and secret
 func New(apiKey, apiSecret string) *TwitterClient {
 	return &TwitterClient{apiKey, apiSecret, ""}
 }
