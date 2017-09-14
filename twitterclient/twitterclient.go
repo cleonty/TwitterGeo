@@ -1,3 +1,4 @@
+// Package twitterclient privides TwitterClient that helps to search for tweets
 package twitterclient
 
 import (
@@ -15,16 +16,23 @@ type authResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+// TwitterClient is a simple Twitter client
 type TwitterClient struct {
 	apiKey      string
 	apiSecret   string
 	bearerToken string
 }
 
+// New creates a new client.
+// apitKey and apiSecret are credentials that are 
+// utilized for Application-only authentication.
+consumer key and secret
 func New(apiKey, apiSecret string) *TwitterClient {
 	return &TwitterClient{apiKey, apiSecret, ""}
 }
 
+// ObtainBearerToken makes an auth request with credeintials
+// and exchange these credentials for a bearer token.
 func (twitterClient *TwitterClient) ObtainBearerToken() error {
 	data := url.Values{}
 	data.Set("grant_type", "client_credentials")
@@ -53,7 +61,8 @@ func (twitterClient *TwitterClient) ObtainBearerToken() error {
 	return nil
 }
 
-func (twitterClient *TwitterClient) Search(query string) (body1 string, err error) {
+// Search returns latests Tweets that match the query
+func (twitterClient *TwitterClient) Search(query string) (resultBody string, err error) {
 	req, err := http.NewRequest("GET", "https://api.twitter.com/1.1/search/tweets.json", nil)
 	if err != nil {
 		return "", err
@@ -76,6 +85,7 @@ func (twitterClient *TwitterClient) Search(query string) (body1 string, err erro
 	return string(body), nil
 }
 
+// SearchHandler implements http.Handler
 func (twitterClient *TwitterClient) SearchHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
