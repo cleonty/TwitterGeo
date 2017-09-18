@@ -6,8 +6,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/cleonty/twittergeo/instagramclient"
-	"github.com/cleonty/twittergeo/twitterclient"
+	"github.com/cleonty/twitterclient"
 )
 
 func installTwitterClient(mux *http.ServeMux, pattern string) {
@@ -22,18 +21,9 @@ func installTwitterClient(mux *http.ServeMux, pattern string) {
 	mux.Handle(pattern, twitterClient.SearchHandler())
 }
 
-func installInstagramClient(mux *http.ServeMux, pattern string) {
-	clientId := "72cdc1f90de845f3ac377f72aa22d266"
-	clientSecret := ""
-	accessToken := "1540244705.72cdc1f.e9cde10469b64164bbab22aedd6b92e1"
-	instagramClient := instagramclient.NewWithAccessToken(clientId, clientSecret, accessToken)
-	mux.Handle(pattern, instagramClient.SearchHandler())
-}
-
 func main() {
 	myMux := http.NewServeMux()
 	installTwitterClient(myMux, "/twitter/search/")
-	installInstagramClient(myMux, "/instagram/search/")
 	myMux.Handle("/", http.FileServer(assetFS()))
 	if runtime.GOOS == "windows" {
 		err := exec.Command("cmd", "/c", "start", "http://localhost:8383/").Start()
