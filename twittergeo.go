@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 
@@ -22,15 +23,20 @@ func installTwitterClient(mux *http.ServeMux, pattern string) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8383"
+		fmt.Println("$PORT env variable is not set. Using port " + port)
+	}
 	myMux := http.NewServeMux()
 	installTwitterClient(myMux, "/twitter/search/")
 	myMux.Handle("/", http.FileServer(assetFS()))
 	if runtime.GOOS == "windows" {
-		err := exec.Command("cmd", "/c", "start", "http://localhost:8383/").Start()
+		err := exec.Command("cmd", "/c", "start", "http://localhost:"+port).Start()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 	}
-	http.ListenAndServe(":8383", myMux)
+	http.ListenAndServe(":"+port, myMux)
 }
