@@ -1,0 +1,12 @@
+{
+  "name": "twittergeo",
+  "description": "TwitterGeo shows tweets on the map",
+  "keywords": [
+    "go",
+    "twitter"
+  ],
+  "image": "heroku/go:1.8",
+  "mount_dir": "src/github.com/cleonty/twittergeo",
+  "website": "http://github.com/cleonty/twittergeo",
+  "repository": "http://github.com/cleonty/twittergeo"
+}
