@@ -1,0 +1,5 @@
+applications:
+ - name: twittergeo
+   random-route: true
+   memory: 128M
+   buildpack: go_buildpack
