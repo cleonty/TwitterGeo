@@ -5,7 +5,7 @@
     "go",
     "twitter"
   ],
-  "image": "heroku/go:1.8",
+  "image": "heroku/go:1.13",
   "mount_dir": "src/github.com/cleonty/twittergeo",
   "website": "http://github.com/cleonty/twittergeo",
   "repository": "http://github.com/cleonty/twittergeo"
