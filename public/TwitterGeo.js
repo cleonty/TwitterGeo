@@ -239,7 +239,6 @@ TweetList.prototype.onKeyPressed = function (e) {
 };
 
 TweetList.prototype.onWheel = function (e) {
-  e.preventDefault();
   e.stopPropagation();
   if (e.wheelDelta > 0) {
     this.activatePreviousTweet();
