@@ -37,7 +37,7 @@ Tweet.prototype.getHtmlContent = function () {
     `  <div class="media-body">`,
     `    <h4 class="media-heading"><a href="${userProfileLink}" target="_blank">${this.tweetObject.user.name}</a></h4>`,
     `    <p>${formattedText}</p>`,
-    `    <p>Время создания: ${formattedTime}</p>`,    
+    `    <p>Time: ${formattedTime}</p>`,    
     `  </div>`,
     `</div>`
   ].join('\n');
@@ -325,8 +325,8 @@ TwitterGeo.prototype.geoSuccess = function (position) {
   this.reloadTweets();
 };
 
-TwitterGeo.prototype.geoError = function () {
-  alert("Sorry, no position available.");
+TwitterGeo.prototype.geoError = function (e) {
+  alert(`sorry, ${e.message}`);
 };
 
 TwitterGeo.prototype.watchPosition = function () {
