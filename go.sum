@@ -1,4 +1,4 @@
-github.com/cleonty/twitterclient v0.0.0-20170918052642-57fdf9bf08a5 h1:lQD975Bciu3K0rihneF/cFXXS8jw51JoEaaz+XF9gaE=
-github.com/cleonty/twitterclient v0.0.0-20170918052642-57fdf9bf08a5/go.mod h1:Ma3V7oOP1tXbsptF/GR4m4KdjyB6HeZhlAIZmJ/cFrg=
+github.com/cleonty/twitterclient v0.0.0-20200523023338-ac9720b22d08 h1:b+GF/C/qZPkJR6y/Vi9fWPx6Oab4bn07qm3AEGp4nzo=
+github.com/cleonty/twitterclient v0.0.0-20200523023338-ac9720b22d08/go.mod h1:IHFsWcBbnokI9OtT/uTcBSA1MNV5L1/1ipjlv+fO0To=
 github.com/elazarl/go-bindata-assetfs v1.0.0 h1:G/bYguwHIzWq9ZoyUQqrjTmJbbYn3j3CKKpKinvZLFk=
 github.com/elazarl/go-bindata-assetfs v1.0.0/go.mod h1:v+YaWX3bdea5J/mo8dSETolEo7R71Vk1u8bnjau5yw4=
