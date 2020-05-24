@@ -1,2 +1,4 @@
 image: Ubuntu
 build: off
+build_script:
+  go build
