@@ -1,4 +1,5 @@
 image: Ubuntu
 build: off
 build_script:
-  go build
+  - go build
+  - ls -l ./twittergeo
