@@ -3,3 +3,12 @@ build: off
 build_script:
   - go build
   - ls -l ./twittergeo
+after_build:
+  - 7z a twittergeo.zip ./twittergeo
+
+artifacts:
+  - path: twittergeo.zip
+    name: twittergeo
+  
+
+
