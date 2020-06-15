@@ -24,7 +24,6 @@ Open <http://localhost:8888> in the browser.
 ## Building a docker image
 
 ```
-docker build -t twittergeo .
-docker tag twittergeo cleonty/twittergeo:latest
+docker build -t cleonty/twittergeo:latest .
 docker push cleonty/twittergeo:latest
 ```

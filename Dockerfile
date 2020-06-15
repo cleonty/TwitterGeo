@@ -1,11 +1,10 @@
-FROM golang:1.13
-
+FROM golang:1.13-alpine AS builder
 WORKDIR /go/src/app
 COPY . .
+RUN go build -o twittergeo
 
-RUN go-wrapper download   # "go get -d -v ./..."
-RUN go-wrapper install    # "go install -v ./..."
-
+FROM alpine:latest  
+WORKDIR /root/
+COPY --from=builder /go/src/app/twittergeo .
 EXPOSE 8383
-
-CMD ["go-wrapper", "run"] # ["app"]
+CMD ["./twittergeo"]
