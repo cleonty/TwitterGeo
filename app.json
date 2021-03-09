@@ -1,5 +1,6 @@
 {
   "name": "twittergeo",
+  "stack": "heroku-20",
   "description": "TwitterGeo shows tweets on the map",
   "keywords": [
     "go",
