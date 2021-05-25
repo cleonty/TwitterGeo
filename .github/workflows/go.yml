@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         go: [ '1.16', '1.15', '1.14' ]
-    name: Go ${{ matrix.go }} sample
+    name: Go ${{ matrix.go }} Twitter Geo
     steps:
       - uses: actions/checkout@v2
       - name: Setup go
