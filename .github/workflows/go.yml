@@ -20,4 +20,4 @@ jobs:
         with:
           name: TwitterGeo ${{ matrix.go }}-${{ matrix.os }} 
           # A file, directory or wildcard pattern that describes what to upload
-          path: twittergeo(\.exe)?
+          path: twittergeo
